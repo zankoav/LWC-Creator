@@ -7,6 +7,10 @@ This plugin help you to create LWC component with .scss file easily
 
 Complete plugin for LWC Open Source.
 
+### 1.0.1
+
+Add logo icon for plugin
+
 -----------------------------------------------------------------------------------------------------------
 
 ## Working
