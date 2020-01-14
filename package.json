@@ -4,6 +4,7 @@
     "description": "Create Lightning Web Component with SCSS file",
     "version": "1.0.0",
     "publisher": "AlexandrZanko",
+    "icon": "icon.png",
     "engines": {
         "vscode": "^1.41.0"
     },
