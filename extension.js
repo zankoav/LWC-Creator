@@ -15,6 +15,7 @@ export default class ${name} extends LightningElement {
 }`;
 const contentSCSS = () => `@import './../../common/mixins';`;
 const contentHTML = () => `<template></template>`;
+const contentMIXINS = () => `$PRIMARY:#101010;`;
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -32,8 +33,33 @@ function activate(context) {
         let cmpName = await vscode.window.showInputBox({ placeHolder: 'Name:' });
         if (cmpName) {
             const relativeName = cmpName.toLocaleLowerCase();
-            const folderPath = vscode.workspace.workspaceFolders[0].uri.toString().split(":")[1] + '/frontend/components';
-            const folderName = path.join(folderPath, relativeName);
+            const folderFrontendPath = vscode.workspace.workspaceFolders[0].uri.toString().split(":")[1] + '/frontend';
+            const folderComponentsPath = folderFrontendPath + '/components';
+            const folderCommonPath = folderFrontendPath + '/common';
+
+            if (!fs.existsSync(folderFrontendPath)) {
+                fs.mkdirSync(folderFrontendPath);
+            }
+
+            if (!fs.existsSync(folderComponentsPath)) {
+                fs.mkdirSync(folderComponentsPath);
+            }
+
+            if (!fs.existsSync(folderCommonPath)) {
+                fs.mkdirSync(folderCommonPath);
+            }
+
+            const folderMixinFile = path.join(folderCommonPath, 'mixins.scss');
+            const folderName = path.join(folderComponentsPath, relativeName);
+
+            if (!fs.existsSync(folderMixinFile)) {
+                fs.writeFile(folderMixinFile, contentMIXINS(), err => {
+                    if (err) {
+                        return vscode.window.showErrorMessage(`Error! Can not create mixins.scss file`);
+                    }
+                });
+            }
+
             if (!fs.existsSync(folderName)) {
                 fs.mkdirSync(folderName);
                 fs.writeFile(path.join(folderName, `${relativeName}.js`), contentJS(cmpName), err => {

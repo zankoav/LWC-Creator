@@ -11,6 +11,10 @@ Complete plugin for LWC Open Source.
 
 Add logo icon for plugin
 
+### 1.1.1
+
+Now if folders not exists `frontend/components` they will create automatically. Folder `common` and file `mixins.scss` will be create same.
+
 -----------------------------------------------------------------------------------------------------------
 
 ## Working
