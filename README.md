@@ -15,13 +15,20 @@ Add logo icon for plugin
 
 Now if folders not exists `frontend/components` they will create automatically. Folder `common` and file `mixins.scss` will be create same.
 
+### 1.2.1
+
+File `mixins.scss` rename to `constants.scss`.
+Component `.scss` file will only with empty class
+
+Add Command to create utility module.
+
 -----------------------------------------------------------------------------------------------------------
 
 ## Working
 
 * Press `Ctrl+Shift+P` (Windows, Linux) or `Cmd+Shift+P` (macOS) to see a list of Markdown snippets
-* Choose `LWC Create Component`
-* Input `Name` of component witch you want to create (use camel-case)
+* Choose `LWC Create Component` or `LWC Create Module`
+* Input `Name` of component(module) witch you want to create (use camel-case)
 
 
 ### Contribution

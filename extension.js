@@ -7,15 +7,18 @@ const path = require('path');
 // your extension is activated the very first time the command is executed
 
 const contentJS = (name) => `
-import { LightningElement, track } from 'lwc';
-import '${name.toLocaleLowerCase()}.scss';
+import { LightningElement } from 'lwc';
+import './${name.toLocaleLowerCase()}.scss';
 
-export default class ${name} extends LightningElement {
+export default class ${name} extends LightningElement {}`;
 
-}`;
-const contentSCSS = () => `@import './../../common/mixins';`;
+const contentUtilsJS = (name) => `export default class ${name} {}`;
+
+const contentSCSS = (name) => `.${name.toLocaleLowerCase()}{}`;
+
 const contentHTML = () => `<template></template>`;
-const contentMIXINS = () => `$PRIMARY:#101010;`;
+
+const contentConstants = () => `$PRIMARY:#101010;`;
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -29,7 +32,7 @@ function activate(context) {
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.createlwc', async () => {
+    let lwcComponent = vscode.commands.registerCommand('extension.createlwc', async () => {
         let cmpName = await vscode.window.showInputBox({ placeHolder: 'Name:' });
         if (cmpName) {
             const relativeName = cmpName.toLocaleLowerCase();
@@ -49,13 +52,13 @@ function activate(context) {
                 fs.mkdirSync(folderCommonPath);
             }
 
-            const folderMixinFile = path.join(folderCommonPath, 'mixins.scss');
+            const folderMixinFile = path.join(folderCommonPath, 'constants.scss');
             const folderName = path.join(folderComponentsPath, relativeName);
 
             if (!fs.existsSync(folderMixinFile)) {
-                fs.writeFile(folderMixinFile, contentMIXINS(), err => {
+                fs.writeFile(folderMixinFile, contentConstants(), err => {
                     if (err) {
-                        return vscode.window.showErrorMessage(`Error! Can not create mixins.scss file`);
+                        return vscode.window.showErrorMessage(`Error! Can not create constants.scss file`);
                     }
                 });
             }
@@ -68,7 +71,7 @@ function activate(context) {
                     }
                 });
 
-                fs.writeFile(path.join(folderName, `${relativeName}.scss`), contentSCSS(), err => {
+                fs.writeFile(path.join(folderName, `${relativeName}.scss`), contentSCSS(cmpName), err => {
                     if (err) {
                         return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.scss file`);
                     }
@@ -83,7 +86,42 @@ function activate(context) {
         }
     });
 
-    context.subscriptions.push(disposable);
+    let lwcUtils = vscode.commands.registerCommand('extension.createlwcutils', async () => {
+        let cmpName = await vscode.window.showInputBox({ placeHolder: 'Name:' });
+        if (cmpName) {
+            const relativeName = cmpName.toLocaleLowerCase();
+            const folderFrontendPath = vscode.workspace.workspaceFolders[0].uri.toString().split(":")[1] + '/frontend';
+            const folderComponentsPath = folderFrontendPath + '/components';
+
+            if (!fs.existsSync(folderFrontendPath)) {
+                fs.mkdirSync(folderFrontendPath);
+            }
+
+            if (!fs.existsSync(folderComponentsPath)) {
+                fs.mkdirSync(folderComponentsPath);
+            }
+
+            const folderName = path.join(folderComponentsPath, relativeName);
+
+            if (!fs.existsSync(folderName)) {
+                fs.mkdirSync(folderName);
+                fs.writeFile(path.join(folderName, `${relativeName}.js`), contentUtilsJS(cmpName), err => {
+                    if (err) {
+                        return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.js file`);
+                    }
+                });
+
+                fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(), err => {
+                    if (err) {
+                        return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.html file`);
+                    }
+                });
+            }
+        }
+    });
+
+    context.subscriptions.push(lwcComponent);
+    context.subscriptions.push(lwcUtils);
 }
 exports.activate = activate;
 
