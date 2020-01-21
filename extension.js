@@ -18,13 +18,13 @@ const contentSCSS = (name) => `.${name.toLocaleLowerCase()}{}`;
 
 const contentHTML = () => `<template></template>`;
 
-const contentConstants = () => `$PRIMARY:#101010;`;
-
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-
+    let defaultFolder = vscode.workspace.getConfiguration('lwc-creator').defaultComponentsFolder;
+    const pathDir = vscode.workspace.workspaceFolders[0].uri.toString().split(":")[1];
+    defaultFolder = defaultFolder || '';
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     // console.log('Congratulations, your extension "lwc-creator" is now active!');
@@ -36,53 +36,26 @@ function activate(context) {
         let cmpName = await vscode.window.showInputBox({ placeHolder: 'Name:' });
         if (cmpName) {
             const relativeName = cmpName.toLocaleLowerCase();
-            const folderFrontendPath = vscode.workspace.workspaceFolders[0].uri.toString().split(":")[1] + '/frontend';
-            const folderComponentsPath = folderFrontendPath + '/components';
-            const folderCommonPath = folderFrontendPath + '/common';
+            const folderName = path.join(pathDir, defaultFolder, relativeName);
+            await fs.promises.mkdir(folderName, { recursive: true }).catch(console.error);
 
-            if (!fs.existsSync(folderFrontendPath)) {
-                fs.mkdirSync(folderFrontendPath);
-            }
+            fs.writeFile(path.join(folderName, `${relativeName}.js`), contentJS(cmpName), err => {
+                if (err) {
+                    return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.js file`);
+                }
+            });
 
-            if (!fs.existsSync(folderComponentsPath)) {
-                fs.mkdirSync(folderComponentsPath);
-            }
+            fs.writeFile(path.join(folderName, `${relativeName}.scss`), contentSCSS(cmpName), err => {
+                if (err) {
+                    return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.scss file`);
+                }
+            });
 
-            if (!fs.existsSync(folderCommonPath)) {
-                fs.mkdirSync(folderCommonPath);
-            }
-
-            const folderMixinFile = path.join(folderCommonPath, 'constants.scss');
-            const folderName = path.join(folderComponentsPath, relativeName);
-
-            if (!fs.existsSync(folderMixinFile)) {
-                fs.writeFile(folderMixinFile, contentConstants(), err => {
-                    if (err) {
-                        return vscode.window.showErrorMessage(`Error! Can not create constants.scss file`);
-                    }
-                });
-            }
-
-            if (!fs.existsSync(folderName)) {
-                fs.mkdirSync(folderName);
-                fs.writeFile(path.join(folderName, `${relativeName}.js`), contentJS(cmpName), err => {
-                    if (err) {
-                        return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.js file`);
-                    }
-                });
-
-                fs.writeFile(path.join(folderName, `${relativeName}.scss`), contentSCSS(cmpName), err => {
-                    if (err) {
-                        return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.scss file`);
-                    }
-                });
-
-                fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(), err => {
-                    if (err) {
-                        return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.html file`);
-                    }
-                });
-            }
+            fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(), err => {
+                if (err) {
+                    return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.html file`);
+                }
+            });
         }
     });
 
@@ -90,33 +63,21 @@ function activate(context) {
         let cmpName = await vscode.window.showInputBox({ placeHolder: 'Name:' });
         if (cmpName) {
             const relativeName = cmpName.toLocaleLowerCase();
-            const folderFrontendPath = vscode.workspace.workspaceFolders[0].uri.toString().split(":")[1] + '/frontend';
-            const folderComponentsPath = folderFrontendPath + '/components';
+            const folderName = path.join(pathDir, defaultFolder, relativeName);
 
-            if (!fs.existsSync(folderFrontendPath)) {
-                fs.mkdirSync(folderFrontendPath);
-            }
+            await fs.promises.mkdir(folderName, { recursive: true }).catch(console.error);
 
-            if (!fs.existsSync(folderComponentsPath)) {
-                fs.mkdirSync(folderComponentsPath);
-            }
+            fs.writeFile(path.join(folderName, `${relativeName}.js`), contentUtilsJS(cmpName), err => {
+                if (err) {
+                    return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.js file`);
+                }
+            });
 
-            const folderName = path.join(folderComponentsPath, relativeName);
-
-            if (!fs.existsSync(folderName)) {
-                fs.mkdirSync(folderName);
-                fs.writeFile(path.join(folderName, `${relativeName}.js`), contentUtilsJS(cmpName), err => {
-                    if (err) {
-                        return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.js file`);
-                    }
-                });
-
-                fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(), err => {
-                    if (err) {
-                        return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.html file`);
-                    }
-                });
-            }
+            fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(), err => {
+                if (err) {
+                    return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.html file`);
+                }
+            });
         }
     });
 

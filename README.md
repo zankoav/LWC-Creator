@@ -20,7 +20,11 @@ Now if folders not exists `frontend/components` they will create automatically. 
 File `mixins.scss` rename to `constants.scss`.
 Component `.scss` file will only with empty class
 
-Add Command to create utility module.
+### 1.3.0
+
+File `constants.scss` had removed.
+Folder `common` had removed.
+Now you can change default folder `frontend/components` in settings `Extentions->LWC Creator`
 
 -----------------------------------------------------------------------------------------------------------
 
