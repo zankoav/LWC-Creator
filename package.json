@@ -2,7 +2,7 @@
     "name": "lwc-creator",
     "displayName": "LWC Creator",
     "description": "Create Lightning Web Component with SCSS file",
-    "version": "1.3.0",
+    "version": "1.3.1",
     "publisher": "AlexandrZanko",
     "icon": "icon.png",
     "engines": {
@@ -34,12 +34,14 @@
             {
                 "command": "extension.createlwc",
                 "title": "LWC Create Component",
-                "key": "Cmd(Ctrl)+Shift+P"
+                "key": "ctrl+shift+p",
+                "mac": "cmd+shift+p"
             },
             {
                 "command": "extension.createlwcutils",
                 "title": "LWC Create Module",
-                "key": "Cmd(Ctrl)+Shift+P"
+                "key": "ctrl+shift+p",
+                "mac": "cmd+shift+p"
             }
         ]
     },

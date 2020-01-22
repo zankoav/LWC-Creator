@@ -26,6 +26,10 @@ File `constants.scss` had removed.
 Folder `common` had removed.
 Now you can change default folder `frontend/components` in settings `Extentions->LWC Creator`
 
+### 1.3.1
+
+Camel case create components with lower case first letter.
+
 -----------------------------------------------------------------------------------------------------------
 
 ## Working

@@ -8,15 +8,15 @@ const path = require('path');
 
 const contentJS = (name) => `
 import { LightningElement } from 'lwc';
-import './${name.toLocaleLowerCase()}.scss';
+import './${lowerCaseFirst(name)}.scss';
 
 export default class ${name} extends LightningElement {}`;
 
 const contentUtilsJS = (name) => `export default class ${name} {}`;
 
-const contentSCSS = (name) => `.${name.toLocaleLowerCase()}{}`;
+const contentSCSS = (name) => `.${name}{}`;
 
-const contentHTML = () => `<template></template>`;
+const contentHTML = (name) => `<template>${name}</template>`;
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -35,25 +35,25 @@ function activate(context) {
     let lwcComponent = vscode.commands.registerCommand('extension.createlwc', async () => {
         let cmpName = await vscode.window.showInputBox({ placeHolder: 'Name:' });
         if (cmpName) {
-            const relativeName = cmpName.toLocaleLowerCase();
+            const relativeName = lowerCaseFirst(cmpName);
             const folderName = path.join(pathDir, defaultFolder, relativeName);
             await fs.promises.mkdir(folderName, { recursive: true }).catch(console.error);
 
             fs.writeFile(path.join(folderName, `${relativeName}.js`), contentJS(cmpName), err => {
                 if (err) {
-                    return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.js file`);
+                    return vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.js file`);
                 }
             });
 
-            fs.writeFile(path.join(folderName, `${relativeName}.scss`), contentSCSS(cmpName), err => {
+            fs.writeFile(path.join(folderName, `${relativeName}.scss`), contentSCSS(relativeName), err => {
                 if (err) {
-                    return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.scss file`);
+                    return vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.scss file`);
                 }
             });
 
-            fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(), err => {
+            fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(cmpName), err => {
                 if (err) {
-                    return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.html file`);
+                    return vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.html file`);
                 }
             });
         }
@@ -62,20 +62,20 @@ function activate(context) {
     let lwcUtils = vscode.commands.registerCommand('extension.createlwcutils', async () => {
         let cmpName = await vscode.window.showInputBox({ placeHolder: 'Name:' });
         if (cmpName) {
-            const relativeName = cmpName.toLocaleLowerCase();
+            const relativeName = lowerCaseFirst(cmpName);
             const folderName = path.join(pathDir, defaultFolder, relativeName);
 
             await fs.promises.mkdir(folderName, { recursive: true }).catch(console.error);
 
             fs.writeFile(path.join(folderName, `${relativeName}.js`), contentUtilsJS(cmpName), err => {
                 if (err) {
-                    return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.js file`);
+                    return vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.js file`);
                 }
             });
 
-            fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(), err => {
+            fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(cmpName), err => {
                 if (err) {
-                    return vscode.window.showErrorMessage(`Error! Can not create ${cmpName}.html file`);
+                    return vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.html file`);
                 }
             });
         }
@@ -92,4 +92,8 @@ function deactivate() { }
 module.exports = {
     activate,
     deactivate
+}
+
+function lowerCaseFirst(str) {
+    return str.charAt(0).toLowerCase() + str.slice(1);
 }
