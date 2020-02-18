@@ -2,7 +2,7 @@
     "name": "lwc-creator",
     "displayName": "LWC Creator",
     "description": "Create Lightning Web Component with SCSS file",
-    "version": "1.3.1",
+    "version": "1.4.2",
     "publisher": "AlexandrZanko",
     "icon": "icon.png",
     "engines": {
@@ -27,6 +27,19 @@
                     "type": "string",
                     "default": "frontend/components",
                     "description": "Select the folder to create the component in."
+                },
+                "lwc-creator.defaultStyleFormat": {
+                    "type": "string",
+                    "default": "css",
+                    "enum": [
+                        "css",
+                        "scss",
+                        "sass",
+                        "less"
+                    ],
+                    "enumDescriptions": [
+                        "Use style format what you wish"
+                    ]
                 }
             }
         },

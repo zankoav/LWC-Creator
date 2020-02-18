@@ -30,6 +30,12 @@ Now you can change default folder `frontend/components` in settings `Extentions-
 
 Camel case create components with lower case first letter.
 
+### 1.4.3
+
+Now you can create components with different format styles `css,sass,scss,less`.
+After successful creation you will see `js` document of your component
+Fixed bug with creating components in project with whitespace name.
+
 -----------------------------------------------------------------------------------------------------------
 
 ## Working
