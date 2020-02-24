@@ -24,7 +24,7 @@ const contentHTML = (name) => `<template>${name}</template>`;
 function activate(context) {
     let defaultFolder = vscode.workspace.getConfiguration('lwc-creator').defaultComponentsFolder;
     let defaultStyleFormat = vscode.workspace.getConfiguration('lwc-creator').defaultStyleFormat;
-    const pathDir = vscode.workspace.workspaceFolders[0].uri.path;
+    const pathDir = vscode.workspace.workspaceFolders[0].uri.fsPath;
     defaultFolder = defaultFolder || '';
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -75,10 +75,13 @@ function activate(context) {
             const folderName = path.join(pathDir, defaultFolder, relativeName);
 
             await fs.promises.mkdir(folderName, { recursive: true }).catch(console.error);
-
-            fs.writeFile(path.join(folderName, `${relativeName}.js`), contentUtilsJS(cmpName), err => {
+            const jsFileName = path.join(folderName, `${relativeName}.js`);
+            fs.writeFile(jsFileName, contentUtilsJS(cmpName), err => {
                 if (err) {
                     vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.js file`);
+                } else {
+                    vscode.window.showInformationMessage(`${cmpName} has created successful !`);
+                    vscode.window.showTextDocument(vscode.Uri.file(jsFileName));
                 }
             });
 
