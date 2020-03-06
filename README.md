@@ -3,22 +3,25 @@
 This plugin help you to create LWC component with .scss file easily
 
 ## Release Notes
-### 1.0.0
 
-Complete plugin for LWC Open Source.
+### 1.5.1
+Fixed bug with recreate component with existing name
 
-### 1.0.1
+### 1.5
 
-Add logo icon for plugin
+- Windows bugs fixed
+- If you create Module, will open .js file
+- Update logo
 
-### 1.1.1
+### 1.4.3
 
-Now if folders not exists `frontend/components` they will create automatically. Folder `common` and file `mixins.scss` will be create same.
+Now you can create components with different format styles `css,sass,scss,less`.
+After successful creation you will see `js` document of your component
+Fixed bug with creating components in project with whitespace name.
 
-### 1.2.1
+### 1.3.1
 
-File `mixins.scss` rename to `constants.scss`.
-Component `.scss` file will only with empty class
+Camel case create components with lower case first letter.
 
 ### 1.3.0
 
@@ -26,15 +29,22 @@ File `constants.scss` had removed.
 Folder `common` had removed.
 Now you can change default folder `frontend/components` in settings `Extentions->LWC Creator`
 
-### 1.3.1
+### 1.2.1
 
-Camel case create components with lower case first letter.
+File `mixins.scss` rename to `constants.scss`.
+Component `.scss` file will only with empty class
 
-### 1.4.3
+### 1.1.1
 
-Now you can create components with different format styles `css,sass,scss,less`.
-After successful creation you will see `js` document of your component
-Fixed bug with creating components in project with whitespace name.
+Now if folders not exists `frontend/components` they will create automatically. Folder `common` and file `mixins.scss` will be create same.
+
+### 1.0.1
+
+Add logo icon for plugin
+
+### 1.0.0
+
+Complete plugin for LWC Open Source.
 
 -----------------------------------------------------------------------------------------------------------
 
