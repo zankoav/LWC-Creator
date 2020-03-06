@@ -42,26 +42,33 @@ function activate(context) {
             const folderName = path.join(pathDir, defaultFolder, relativeName);
             await fs.promises.mkdir(folderName, { recursive: true }).catch(console.error);
             const jsFileName = path.join(folderName, `${relativeName}.js`);
-            fs.writeFile(jsFileName, contentJS(cmpName, defaultStyleFormat), err => {
-                if (err) {
-                    vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.js file`);
-                } else {
-                    vscode.window.showInformationMessage(`${cmpName} has created successful !`);
-                    vscode.window.showTextDocument(vscode.Uri.file(jsFileName));
-                }
-            });
 
-            fs.writeFile(path.join(folderName, `${relativeName}.${defaultStyleFormat}`), contentStyle(), err => {
-                if (err) {
-                    vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.${defaultStyleFormat} file`);
-                }
-            });
+            if (!fs.existsSync(folderName)) {
+                fs.writeFile(jsFileName, contentJS(cmpName, defaultStyleFormat), err => {
+                    if (err) {
+                        vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.js file`);
+                    } else {
+                        vscode.window.showInformationMessage(`${cmpName} has created successful !`);
+                        vscode.window.showTextDocument(vscode.Uri.file(jsFileName));
+                    }
+                });
 
-            fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(cmpName), err => {
-                if (err) {
-                    vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.html file`);
-                }
-            });
+                fs.writeFile(path.join(folderName, `${relativeName}.${defaultStyleFormat}`), contentStyle(), err => {
+                    if (err) {
+                        vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.${defaultStyleFormat} file`);
+                    }
+                });
+
+                fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(cmpName), err => {
+                    if (err) {
+                        vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.html file`);
+                    }
+                });
+
+            } else {
+                vscode.window.showInformationMessage(`Oops! ${cmpName} had been created earlier`);
+            }
+
 
 
         }
