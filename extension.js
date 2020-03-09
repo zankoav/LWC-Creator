@@ -40,37 +40,34 @@ function activate(context) {
         if (cmpName) {
             const relativeName = lowerCaseFirst(cmpName);
             const folderName = path.join(pathDir, defaultFolder, relativeName);
+            const isExists = fs.existsSync(folderName);
+            if (isExists) {
+                vscode.window.showInformationMessage(`Oops! ${cmpName} had been created earlier`);
+                return;
+            }
             await fs.promises.mkdir(folderName, { recursive: true }).catch(console.error);
             const jsFileName = path.join(folderName, `${relativeName}.js`);
 
-            if (!fs.existsSync(folderName)) {
-                fs.writeFile(jsFileName, contentJS(cmpName, defaultStyleFormat), err => {
-                    if (err) {
-                        vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.js file`);
-                    } else {
-                        vscode.window.showInformationMessage(`${cmpName} has created successful !`);
-                        vscode.window.showTextDocument(vscode.Uri.file(jsFileName));
-                    }
-                });
+            fs.writeFile(jsFileName, contentJS(cmpName, defaultStyleFormat), err => {
+                if (err) {
+                    vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.js file`);
+                } else {
+                    vscode.window.showInformationMessage(`${cmpName} has created successful !`);
+                    vscode.window.showTextDocument(vscode.Uri.file(jsFileName));
+                }
+            });
 
-                fs.writeFile(path.join(folderName, `${relativeName}.${defaultStyleFormat}`), contentStyle(), err => {
-                    if (err) {
-                        vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.${defaultStyleFormat} file`);
-                    }
-                });
+            fs.writeFile(path.join(folderName, `${relativeName}.${defaultStyleFormat}`), contentStyle(), err => {
+                if (err) {
+                    vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.${defaultStyleFormat} file`);
+                }
+            });
 
-                fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(cmpName), err => {
-                    if (err) {
-                        vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.html file`);
-                    }
-                });
-
-            } else {
-                vscode.window.showInformationMessage(`Oops! ${cmpName} had been created earlier`);
-            }
-
-
-
+            fs.writeFile(path.join(folderName, `${relativeName}.html`), contentHTML(cmpName), err => {
+                if (err) {
+                    vscode.window.showErrorMessage(`Error! Can not create ${relativeName}.html file`);
+                }
+            });
         }
     });
 
@@ -80,7 +77,11 @@ function activate(context) {
         if (cmpName) {
             const relativeName = lowerCaseFirst(cmpName);
             const folderName = path.join(pathDir, defaultFolder, relativeName);
-
+            const isExists = fs.existsSync(folderName);
+            if (isExists) {
+                vscode.window.showInformationMessage(`Oops! ${cmpName} had been created earlier`);
+                return;
+            }
             await fs.promises.mkdir(folderName, { recursive: true }).catch(console.error);
             const jsFileName = path.join(folderName, `${relativeName}.js`);
             fs.writeFile(jsFileName, contentUtilsJS(cmpName), err => {

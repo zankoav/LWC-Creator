@@ -4,6 +4,9 @@ This plugin help you to create LWC component with .scss file easily
 
 ## Release Notes
 
+### 1.5.2
+Fixed bug with recreate module with existing name
+
 ### 1.5.1
 Fixed bug with recreate component with existing name
 
