@@ -2,11 +2,11 @@
     "name": "lwc-creator",
     "displayName": "LWC Creator",
     "description": "Create Lightning Web Component with SCSS file",
-    "version": "1.5.2",
+    "version": "1.5.3",
     "publisher": "AlexandrZanko",
     "icon": "icon.png",
     "engines": {
-        "vscode": "^1.41.0"
+        "vscode": "^1.44.0"
     },
     "repository": {
         "type": "git",

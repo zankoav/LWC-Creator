@@ -1,14 +1,11 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+const UTILS = require('./root/utils');
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 
 const contentJS = (name, styleFormat) => `
 import { LightningElement } from 'lwc';
-import './${lowerCaseFirst(name)}.${styleFormat}';
+import './${UTILS.lowerCaseFirst(name)}.${styleFormat}';
 
 export default class ${name} extends LightningElement {}`;
 
@@ -26,19 +23,13 @@ function activate(context) {
     let defaultStyleFormat = vscode.workspace.getConfiguration('lwc-creator').defaultStyleFormat;
     const pathDir = vscode.workspace.workspaceFolders[0].uri.fsPath;
     defaultFolder = defaultFolder || '';
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    // console.log('Congratulations, your extension "lwc-creator" is now active!');
 
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
     let lwcComponent = vscode.commands.registerCommand('extension.createlwc', async () => {
         let cmpName = await vscode.window.showInputBox({ placeHolder: 'Name:' });
         cmpName = cmpName.replace(" ", "");
-        cmpName = upperCaseFirst(cmpName);
+        cmpName = UTILS.upperCaseFirst(cmpName);
         if (cmpName) {
-            const relativeName = lowerCaseFirst(cmpName);
+            const relativeName = UTILS.lowerCaseFirst(cmpName);
             const folderName = path.join(pathDir, defaultFolder, relativeName);
             const isExists = fs.existsSync(folderName);
             if (isExists) {
@@ -73,9 +64,9 @@ function activate(context) {
 
     let lwcUtils = vscode.commands.registerCommand('extension.createlwcutils', async () => {
         let cmpName = await vscode.window.showInputBox({ placeHolder: 'Name:' });
-        cmpName = upperCaseFirst(cmpName);
+        cmpName = UTILS.upperCaseFirst(cmpName);
         if (cmpName) {
-            const relativeName = lowerCaseFirst(cmpName);
+            const relativeName = UTILS.lowerCaseFirst(cmpName);
             const folderName = path.join(pathDir, defaultFolder, relativeName);
             const isExists = fs.existsSync(folderName);
             if (isExists) {
@@ -112,12 +103,4 @@ function deactivate() { }
 module.exports = {
     activate,
     deactivate
-}
-
-function lowerCaseFirst(str) {
-    return str.charAt(0).toLowerCase() + str.slice(1);
-}
-
-function upperCaseFirst(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
 }
